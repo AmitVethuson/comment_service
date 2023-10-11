@@ -14,12 +14,14 @@ comments = {
 def get_all_comments():
     allcomments = comments
     for i in allcomments:
-        response = requests.get(f'http://localhost:5001/post/{allcomments[i]["post_id"]}')
+        response = requests.get(f'http://host.docker.internal:5001/post/{allcomments[i]["post_id"]}')
         if response.status_code == 200:
-            allcomments[i]['posts'] = response.json()
-        response = requests.get(f'http://localhost:5000/user/{allcomments[i]["user_id"]}')
+            allcomments[i]['post'] = response.json()
+            
+            
+        response = requests.get(f'http://host.docker.internal:5000/user/{allcomments[i]["user_id"]}') 
         if response.status_code == 200:
-            allcomments[i]['user'] = response.json()
+            allcomments[i]['comment_user_info'] = response.json()
     
     return jsonify(allcomments)
 
@@ -29,14 +31,16 @@ def get_all_comments():
 def get_comment(id):
     if id in comments:
         comment_info = comments.get(id,{})
-        print(comment_info)
         if comment_info:
-            response = requests.get(f'http://localhost:5001/post/{comment_info["post_id"]}')
+            response = requests.get(f'http://host.docker.internal:5001/post/{comment_info["post_id"]}') 
             if response.status_code == 200:
                 comment_info['post'] = response.json()
-            response = requests.get(f'http://localhost:5000/user/{comment_info["user_id"]}')
+                
+                
+            response = requests.get(f'http://host.docker.internal:5000/user/{comment_info["user_id"]}') 
             if response.status_code == 200:
-                comment_info['comment_user'] = response.json()
+                comment_info['comment_user_info'] = response.json()
+                
             return jsonify(comment_info)
         else:
             return {"error": "Comment does not exist"}
