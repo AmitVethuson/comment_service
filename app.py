@@ -14,12 +14,12 @@ comments = {
 def get_all_comments():
     allcomments = comments
     for i in allcomments:
-        response = requests.get(f'http://host.docker.internal:5001/post/{allcomments[i]["post_id"]}')
+        response = requests.get(f'https://postserviceamit.azurewebsites.net/post/{allcomments[i]["post_id"]}')
         if response.status_code == 200:
             allcomments[i]['post'] = response.json()
             
             
-        response = requests.get(f'http://host.docker.internal:5000/user/{allcomments[i]["user_id"]}') 
+        response = requests.get(f'http://userserviceamit.azurewebsites.net/user/{allcomments[i]["user_id"]}') 
         if response.status_code == 200:
             allcomments[i]['comment_user_info'] = response.json()
     
@@ -32,12 +32,12 @@ def get_comment(id):
     if id in comments:
         comment_info = comments.get(id,{})
         if comment_info:
-            response = requests.get(f'http://host.docker.internal:5001/post/{comment_info["post_id"]}') 
+            response = requests.get(f'https://postserviceamit.azurewebsites.net/post/{comment_info["post_id"]}') 
             if response.status_code == 200:
                 comment_info['post'] = response.json()
                 
                 
-            response = requests.get(f'http://host.docker.internal:5000/user/{comment_info["user_id"]}') 
+            response = requests.get(f'http://userserviceamit.azurewebsites.net/user/{comment_info["user_id"]}') 
             if response.status_code == 200:
                 comment_info['comment_user_info'] = response.json()
                 
